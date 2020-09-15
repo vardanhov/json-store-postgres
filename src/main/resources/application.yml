@@ -1,0 +1,71 @@
+
+logging:
+  level:
+    ROOT: INFO
+    com.giraone.pms: INFO
+    # org.hibernate: INFO
+    # org.hibernate.type: DEBUG
+    # org.springframework.orm.jpa: INFO
+    # org.springframework.transaction: INFO
+    # org.postgres.jdbc: INFO
+
+management:
+  health:
+    ldap:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        # we want all infos
+        include: '*'
+        # No env - passwords!
+        exclude: env
+    enabled-by-default: true
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    platform: postgresql
+    name: pmsjsonb
+    url: jdbc:postgresql://localhost:5432/pmsjson
+    username: pmsjson
+    password: pmsjson-secret
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: false
+    show-sql: false
+    # The default "true" (using OSIV) is an ANTI pattern!
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+#      javax:
+#        persistence:
+#          schema-generation:
+#            create-source: metadata
+#            scripts:
+#              action: create
+#              create-target: create.sql
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  data:
+    rest:
+      base-path: api
+      default-page-size: 100
+
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+
+application:
+  fillDatabaseWithSamplesOnStart: true
